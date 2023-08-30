@@ -55,7 +55,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.atencia.takenote"
-        minSdkVersion 19
+        minSdkVersion 31
         targetSdkVersion flutter.targetSdkVersion
         versionCode 7// Change to a higher number
         versionName "7.0.2" // Change to a higher number
