@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:takenote/views/notes/list_views/archived_notes_list_view.dart';
 import 'package:takenote/widgets/animations/fade_animation.dart';
 import 'package:takenote/constants/k_constants.dart';
 import 'package:takenote/constants/routes.dart';
@@ -9,8 +10,7 @@ import 'package:takenote/services/auth/bloc/auth_event.dart';
 import 'package:takenote/services/cloud/cloud_note.dart';
 import 'package:takenote/services/cloud/firebase_cloud_storage.dart';
 import 'package:takenote/utilities/dialogs/logout_dialog.dart';
-import 'package:takenote/views/notes/archived_notes_grid_view.dart';
-import 'package:takenote/views/notes/archived_notes_list_view.dart';
+import 'package:takenote/views/notes/grid_views/archived_notes_grid_view.dart';
 
 import '../enums/menu_action.dart';
 
@@ -48,7 +48,7 @@ class _ArchivedViewState extends State<ArchivedView> {
           flexibleSpace: NotesAppBarContainer,
           title: const Text(
             'Archived',
-            style: TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white,),
           ),
           actions: [
             // IconButton(
@@ -85,8 +85,10 @@ class _ArchivedViewState extends State<ArchivedView> {
               icon: isGridView
                   ? const Icon(Icons.list)
                   : const Icon(Icons.view_module_rounded),
+              color: Colors.white,
             ),
             PopupMenuButton<MenuAction>(
+              iconColor: Colors.white,
               // rounded corners
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),

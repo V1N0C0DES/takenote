@@ -5,10 +5,10 @@ import 'package:takenote/services/cloud/cloud_note.dart';
 import 'package:takenote/services/cloud/firebase_cloud_storage.dart';
 import 'package:takenote/widgets/animations/animated_scroll_view_item.dart';
 
-import '../../constants/k_constants.dart';
-import '../../utilities/color_pallette.dart';
-import '../../utilities/dialogs/delete_dialog.dart';
-import '../../utilities/note_colours.dart';
+import '../../../constants/k_constants.dart';
+import '../../../utilities/color_pallette.dart';
+import '../../../utilities/dialogs/delete_dialog.dart';
+import '../../../utilities/note_colours.dart';
 
 typedef NoteCallBack = void Function(CloudNote note);
 

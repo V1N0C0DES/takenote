@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../constants/k_constants.dart';
-import '../../enums/menu_action.dart';
-import '../../services/auth/bloc/auth_bloc.dart';
-import '../../services/auth/bloc/auth_event.dart';
-import '../../utilities/dialogs/logout_dialog.dart';
+import '../../../constants/k_constants.dart';
+import '../../../enums/menu_action.dart';
+import '../../../services/auth/bloc/auth_bloc.dart';
+import '../../../services/auth/bloc/auth_event.dart';
+import '../../../utilities/dialogs/logout_dialog.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);

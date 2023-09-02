@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:takenote/views/notes/grid_views/notes_grid_view.dart';
+import 'package:takenote/views/notes/list_views/notes_list_view.dart';
 import 'package:takenote/widgets/animations/fade_animation.dart';
 import 'package:takenote/constants/k_constants.dart';
 import 'package:takenote/constants/routes.dart';
@@ -9,8 +11,6 @@ import 'package:takenote/services/auth/bloc/auth_event.dart';
 import 'package:takenote/services/cloud/cloud_note.dart';
 import 'package:takenote/services/cloud/firebase_cloud_storage.dart';
 import 'package:takenote/utilities/dialogs/logout_dialog.dart';
-import 'package:takenote/views/notes/notes_grid_view.dart';
-import 'package:takenote/views/notes/notes_list_view.dart';
 
 import '../enums/menu_action.dart';
 
@@ -48,10 +48,11 @@ class _NotesViewState extends State<NotesView> {
           flexibleSpace: NotesAppBarContainer,
           title: const Text(
             'Notes',
-            style: TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white,),
           ),
           actions: [
             IconButton(
+              color: Colors.white,
               onPressed: () {
                 setState(() {
                   isGridView = !isGridView;
@@ -79,6 +80,7 @@ class _NotesViewState extends State<NotesView> {
                   : const Icon(Icons.list),
             ),
             PopupMenuButton<MenuAction>(
+              iconColor: Colors.white,
               // rounded corners
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -86,7 +88,6 @@ class _NotesViewState extends State<NotesView> {
               elevation: 10,
               offset: const Offset(0, 50),
               color: kJungleGreen,
-
               onSelected: (value) async {
                 switch (value) {
                   case MenuAction.logout:

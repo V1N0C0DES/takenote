@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:takenote/services/cloud/cloud_note.dart';
+import 'package:takenote/services/cloud/firebase_cloud_storage.dart';
 import 'package:takenote/widgets/animations/animated_scroll_view_item.dart';
 
-import '../../constants/k_constants.dart';
-import '../../services/cloud/firebase_cloud_storage.dart';
-import '../../utilities/color_pallette.dart';
-import '../../utilities/dialogs/delete_dialog.dart';
-import '../../utilities/note_colours.dart';
+import '../../../constants/k_constants.dart';
+import '../../../utilities/color_pallette.dart';
+import '../../../utilities/dialogs/delete_dialog.dart';
+import '../../../utilities/note_colours.dart';
 
 typedef NoteCallBack = void Function(CloudNote note);
 
-class ArchivedNotesListView extends StatefulWidget {
+class ArchivedNotesGridView extends StatefulWidget {
   final Iterable<CloudNote> notes;
   final NoteCallBack onDeleteNote;
   final NoteCallBack onNoteTap;
 
-  const ArchivedNotesListView({
+  const ArchivedNotesGridView({
     Key? key,
     required this.notes,
     required this.onDeleteNote,
@@ -26,10 +26,10 @@ class ArchivedNotesListView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ArchivedNotesListView> createState() => _ArchivedNotesListViewState();
+  State<ArchivedNotesGridView> createState() => _ArchivedNotesGridViewState();
 }
 
-class _ArchivedNotesListViewState extends State<ArchivedNotesListView> {
+class _ArchivedNotesGridViewState extends State<ArchivedNotesGridView> {
   late final FirebaseCloudStorage _notesService;
 
   @override
@@ -41,131 +41,173 @@ class _ArchivedNotesListViewState extends State<ArchivedNotesListView> {
   @override
   Widget build(BuildContext context) {
     return AnimatedScrollViewItem(
-      child: widget.notes.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    Iconsax.note,
-                    size: 100,
-                    color: kJungleGreen,
-                  ),
-                  Text(
-                    'No notes',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: kJungleGreen,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : SafeArea(
-              bottom: false,
-              child: ListView.builder(
-                cacheExtent: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                //refresh the list when the user scrolls to the top
-                itemCount: widget.notes.length,
-                itemBuilder: (context, index) {
-                  final note = widget.notes.elementAt(index);
-                  //wrap with dismissible to allow swipe to delete
-                  return AnimatedScrollViewItem(
-                    child: Dismissible(
-                      key: Key(note.documentId),
-                      onDismissed: (direction) {
-                        //soft delete the note
-                        _notesService.unarchiveNote(
-                          documentId: note.documentId,
-                          archived: 0,
-                        );
-                        _notesService.softDeleteNote(
-                          documentId: note.documentId,
-                          deleted: 1,
-                        );
-                      },
-                      confirmDismiss: (direction) async {
-                        final result = await showDeleteDialog(context);
-                        return result;
-                      },
-                      //Red background when swiped with delete text
-                      background: Container(
-                        color: Colors.red,
-                        child: const ListTile(
-                          title: Text(
-                            'Deleting...',
-                            textAlign: TextAlign.right,
-                            style: TextStyle(color: Colors.white),
-                          ),
+      child:
+          // if widget is empty display centered container with empty text and icon else display gridview
+          widget.notes.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Iconsax.note,
+                        size: 100,
+                        color: kJungleGreen,
+                      ),
+                      Text(
+                        'No notes',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: kJungleGreen,
                         ),
                       ),
+                    ],
+                  ),
+                )
+              : SafeArea(
+                  bottom: false,
+                  child: GridView.custom(
+                    gridDelegate: twoBytwo,
+                    childrenDelegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        final note = widget.notes.elementAt(index);
 
-                      child: Card(
-                        color: NoteColor.getColor(note.noteColor),
-                        elevation: 3,
-                        child: ListTile(
-                          // leading: CircleAvatar(
-                          //   maxRadius: 14,
-                          //   child: Text(
-                          //     // note index + 1 to start at 1 instead of 0
-                          //     '${index + 1}',
-                          //   ),
-                          // ),
-
-                          //onlongpress to share
-                          onLongPress: () {
-                            showOptionsSheet(context, note);
-                          },
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(90),
-                          ),
-                          title: Text(
-                            note.noteTitle,
-                            maxLines: 1,
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Text(
-                            note.noteText,
-                            maxLines: 1,
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          //Trailing date if notedate is empty then show nothing
-                          trailing: note.noteDate != ''
-                              // formate date to show abbreviated time
-                              ? Text(
-                                  note.noteDate.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
+                        return AnimatedScrollViewItem(
+                          child: Dismissible(
+                            key: Key(note.documentId),
+                            onDismissed: (direction) {
+                              _notesService.unarchiveNote(
+                                documentId: note.documentId,
+                                archived: 0,
+                              );
+                              _notesService.softDeleteNote(
+                                documentId: note.documentId,
+                                deleted: 1,
+                              );
+                            },
+                            confirmDismiss: (direction) async {
+                              final result = await showDeleteDialog(context);
+                              return result;
+                            },
+                            //Red background when swiped with delete text
+                            child: Card(
+                              color: NoteColor.getColor(note.noteColor),
+                              margin: const EdgeInsets.all(6),
+                              elevation: 3,
+                              child: Visibility(
+                                visible: widget.notes.isNotEmpty,
+                                // child card with note title and note content inkwell container
+                                child: InkWell(
+                                  // onlongpress show optionsheet
+                                  onLongPress: () {
+                                    widget.onNoteTap(note);
+                                    showOptionsSheet(
+                                      // show optionsheet
+                                      context,
+                                      note,
+                                    );
+                                  },
+                                  onTap: () {
+                                    widget.onNoteTap(note);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          note.noteTitle,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: kRichBlackFogra,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        // Divider
+                                        const Divider(
+                                          color: kRichBlackFogra,
+                                          thickness: 1.3,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Expanded(
+                                          child: Text(
+                                            note.noteText,
+                                            style: const TextStyle(
+                                              //scale factor to make text smaller
+                                              fontSize: 15,
+                                              height: 1.5,
+                                            ),
+                                            maxLines: 6,
+                                            overflow: TextOverflow.fade,
+                                          ),
+                                        ),
+                                        // date and time of note creation in the bottom right corner  of the card
+                                        const Spacer(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            // show date and time of note creation with border
+                                            Container(
+                                              padding: const EdgeInsets.all(4),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                              ),
+                                              child: Text(
+                                                note.noteDate.toString(),
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                )
-                              : const SizedBox.shrink(),
+                                ),
+                                // child: ListTile(
+                                //   //onlongpress to share
+                                //   onLongPress: () {
+                                //     _showOptionsSheet(context, note);
+                                //   },
+                                //   contentPadding: const EdgeInsets.symmetric(
+                                //       horizontal: 16, vertical: 8),
 
-                          // trailing: IconButton(
-                          //   onPressed: () async {
-                          //     final shouldDelete =
-                          //         await showDeleteDialog(context);
-                          //     if (shouldDelete) {
-                          //       widget.onDeleteNote(note);
-                          //     }
-                          //   },
-                          //   icon: const Icon(Icons.delete, color: Colors.grey),
-                          // ),
-                          onTap: () {
-                            widget.onNoteTap(note);
-                          },
-                        ),
-                      ),
+                                //   title: Text(
+                                //     note.noteTitle,
+                                //     maxLines: 1,
+                                //     softWrap: true,
+                                //     overflow: TextOverflow.fade,
+                                //   ),
+                                //   subtitle: Text(
+                                //     note.noteText,
+                                //     maxLines: 10,
+                                //     softWrap: true,
+                                //     overflow: TextOverflow.fade,
+                                //   ),
+                                //   //date positioned bottom right
+
+                                //   onTap: () {
+                                //     widget.onNoteTap(note);
+                                //   },
+                                // ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      childCount: widget.notes.length,
+                      addAutomaticKeepAlives: true,
                     ),
-                  );
-                },
-              ),
-            ),
+                  )),
     );
   }
 
@@ -268,15 +310,13 @@ class _ArchivedNotesListViewState extends State<ArchivedNotesListView> {
                       borderRadius: BorderRadius.circular(15),
                       onTap: () {
                         // Delete Note Function
-                        _notesService.unarchiveNote(
-                          documentId: note.documentId,
-                          archived: 0,
-                        );
-                        _notesService.softDeleteNote(
-                          documentId: note.documentId,
-                          deleted: 1,
-                        );
-                        Navigator.of(context).pop();
+                        showDeleteDialog(context).then((result) {
+                          if (result) {
+                            widget.onDeleteNote.call(note);
+                          }
+                          //pop
+                          Navigator.pop(context);
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -294,6 +334,7 @@ class _ArchivedNotesListViewState extends State<ArchivedNotesListView> {
                         ),
                       ),
                     ),
+
                     InkWell(
                       borderRadius: BorderRadius.circular(15),
                       // onTap: () {

@@ -3,7 +3,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:takenote/constants/k_constants.dart';
 import 'package:takenote/services/auth/auth_service.dart';
 import 'package:takenote/views/archived_view.dart';
-import 'package:takenote/views/notes/delete_view.dart';
+import 'package:takenote/views/notes/default/delete_view.dart';
 import 'package:takenote/views/notes_view.dart';
 
 import '../../constants/routes.dart';
@@ -55,6 +55,7 @@ class _AppViewState extends State<AppView> {
       // Set the floating action button location
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       backgroundColor: kBdazalledBlue.withOpacity(0.95),
+
       body: Container(
         // Apply gradient background
         decoration: BoxDecoration(

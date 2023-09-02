@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:takenote/constants/k_constants.dart';
 import 'package:takenote/services/cloud/cloud_note.dart';
+import 'package:takenote/services/cloud/firebase_cloud_storage.dart';
+import 'package:takenote/utilities/color_pallette.dart';
+import 'package:takenote/utilities/dialogs/cannot_share_empty_note_dialog.dart';
+import 'package:takenote/utilities/dialogs/delete_dialog.dart';
+import 'package:takenote/utilities/note_colours.dart';
 import 'package:takenote/widgets/animations/animated_scroll_view_item.dart';
 
-import '../../constants/k_constants.dart';
-import '../../services/cloud/firebase_cloud_storage.dart';
-import '../../utilities/color_pallette.dart';
-import '../../utilities/dialogs/cannot_share_empty_note_dialog.dart';
-import '../../utilities/dialogs/delete_dialog.dart';
-import '../../utilities/note_colours.dart';
 
 typedef NoteCallBack = void Function(CloudNote note);
 

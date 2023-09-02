@@ -4,7 +4,7 @@ import 'package:takenote/services/auth/bloc/auth_bloc.dart';
 import 'package:takenote/services/auth/bloc/auth_event.dart';
 import 'package:takenote/services/auth/bloc/auth_state.dart';
 import 'package:takenote/views/notes/app_view.dart';
-import 'package:takenote/views/onboarding_view.dart';
+import 'package:takenote/views/onboarding/onboarding_view.dart';
 
 import 'onboarding/forgot_password_view.dart';
 import 'onboarding/login_view.dart';
