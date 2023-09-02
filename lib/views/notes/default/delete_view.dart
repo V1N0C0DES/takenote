@@ -85,7 +85,6 @@ class _DeleteViewState extends State<DeleteView> {
                 : const Icon(Icons.view_module_rounded),
           ),
           PopupMenuButton<MenuAction>(
-            iconColor: Colors.white,
             // rounded corners
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -93,7 +92,10 @@ class _DeleteViewState extends State<DeleteView> {
             elevation: 10,
             offset: const Offset(0, 50),
             color: kJungleGreen,
-
+            child: Icon(
+              Icons.more_vert,
+              color: Colors.white, // Set the icon color here
+            ),
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
