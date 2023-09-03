@@ -5,6 +5,8 @@
   </a>
 </p>
 
+[![Codemagic build status](https://api.codemagic.io/apps/6343ed3a720e3cd60e1f926b/6343ed3a720e3cd60e1f926a/status_badge.svg)](https://codemagic.io/apps/6343ed3a720e3cd60e1f926b/6343ed3a720e3cd60e1f926a/latest_build)
+
 <p align="center">
   Take Notes
 </p>
@@ -18,6 +20,8 @@
     <img alt="Get it on Google Play" title="Google Play" src="http://i.imgur.com/mtGRPuM.png" width="140">
   </a>
 </p> -->
+
+
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
