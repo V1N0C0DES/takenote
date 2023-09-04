@@ -64,6 +64,7 @@ class _ArchivedNotesListViewState extends State<ArchivedNotesListView> {
           : SafeArea(
               bottom: false,
               child: ListView.builder(
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                 cacheExtent: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                 //refresh the list when the user scrolls to the top
